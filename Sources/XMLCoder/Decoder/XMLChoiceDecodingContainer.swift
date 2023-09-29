@@ -32,13 +32,21 @@ struct XMLChoiceDecodingContainer<K: CodingKey>: KeyedDecodingContainerProtocol 
     }
 
     // MARK: - KeyedDecodingContainerProtocol Methods
-
+    
+    // FIXME: allkeys fails: force unwraps nil
     public var allKeys: [Key] {
         return container.withShared { [Key(stringValue: $0.key)!] }
     }
 
+    // FIXME: Not Working
     public func contains(_ key: Key) -> Bool {
         return container.withShared { $0.key == key.stringValue }
+    }
+    
+    public func contains(_ stringValue: String) -> Bool? {
+        let xmlString = container.xmlString
+        return ((xmlString?.contains(stringValue)))
+//        return container.withShared { $0.key == stringValue }
     }
 
     public func decodeNil(forKey key: Key) throws -> Bool {
